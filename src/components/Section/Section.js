@@ -1,14 +1,8 @@
-import { FeedbackOptions } from "../FeedbackOptions/FeedbackOptions";
-import { Statistics } from "../Statistics/Statistics";
-import { Notification } from "../Notification/Notification";
-
-export const Section = ({ options, title, onLeaveFeedback, statistics, positive, total, message }) => {
+export const Section = ({title, children }) => {
     return (
         <div>
             <h1>{title}</h1>
-            <FeedbackOptions onLeaveFeedback={onLeaveFeedback} options={options}></FeedbackOptions>
-            {total > 0 ?  <Statistics statistics={statistics} total={total} positive={positive}></Statistics> : <Notification message={message}></Notification>}
-           
+            {children}    
         </div>
     )
 }
