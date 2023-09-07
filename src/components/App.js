@@ -3,6 +3,8 @@ import { Section } from "./Section/Section";
 import { FeedbackOptions } from "./FeedbackOptions/FeedbackOptions";
 import { Statistics } from "./Statistics/Statistics";
 import { Notification } from "./Notification/Notification";
+import { GlobalStyle } from "./GlobalStyle";
+import {Layout} from "./Layout.styled"
 
 export class App extends Component {
   
@@ -18,25 +20,37 @@ export class App extends Component {
     })
   }
 
-  countTotalFeedback = () => {
+  findSum = () => {
     return (Object.values(this.state)).reduce((total, number) => { return total + number }, 0);
+  }
+  
+  countTotalFeedback = () => {
+    return this.findSum();
   }
 
   countPositiveFeedbackPercentage = () => {
-    const totalSum = (Object.values(this.state)).reduce((total, number) => { return total + number }, 0);
+    const totalSum = this.findSum();
     return Math.round(this.state.good * 100 / totalSum )
   }
  
   render() {
-    const total = this.countTotalFeedback();
-    const positiveFeedback = this.countPositiveFeedbackPercentage();
+    const { countTotalFeedback, countPositiveFeedbackPercentage, state, clickHandler} = this;
+
+    const total = countTotalFeedback();
+    const positiveFeedback = countPositiveFeedbackPercentage();
+
     return (
-    <div>
+    <Layout>
         <Section title="Please leave feedback">
-          <FeedbackOptions onLeaveFeedback={this.clickHandler} options={Object.keys(this.state)}></FeedbackOptions>
-          {total > 0 ?  <Statistics statistics={this.state} total={total} positive={positiveFeedback}></Statistics> : <Notification message="There is no feedback"></Notification>}
+          <FeedbackOptions
+            onLeaveFeedback={clickHandler}
+            options={Object.keys(state)}></FeedbackOptions>
+          {total > 0 ?
+            <Statistics statistics={state} total={total} positive={positiveFeedback}></Statistics> :
+            <Notification message="There is no feedback"></Notification>}
         </Section>
-    </div>
+        <GlobalStyle/>
+    </Layout>
   );
   }
 };
